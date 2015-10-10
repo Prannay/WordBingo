@@ -5,4 +5,33 @@
     <string name="action_settings">Settings</string>
 
     <string name="button_00">A</string>
+    <string name="button_01">B</string>
+    <string name="button_02">c</string>
+    <string name="button_03">D</string>
+    <string name="button_04">E</string>
+    <string name="button_10">F</string>
+    <string name="button_11">G</string>
+    <string name="button_12">H</string>
+    <string name="button_13">I</string>
+    <string name="button_14">J</string>
+    <string name="button_20">K</string>
+    <string name="button_21">L</string>
+    <string name="button_22">M</string>
+    <string name="button_23">N</string>
+    <string name="button_24">O</string>
+    <string name="button_30">P</string>
+    <string name="button_31">Q</string>
+    <string name="button_32">R</string>
+    <string name="button_33">S</string>
+    <string name="button_34">T</string>
+    <string name="button_40">U</string>
+    <string name="button_41">V</string>
+    <string name="button_42">W</string>
+    <string name="button_43">X</string>
+    <string name="button_44">Y</string>
+    <string name="textView_B">  B</string>
+    <string name="textView_I">I</string>
+    <string name="textView_N">N</string>
+    <string name="textView_G">G</string>
+    <string name="textView_O">O</string>
 </resources>
