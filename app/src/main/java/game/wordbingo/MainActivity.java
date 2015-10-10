@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
     private TextView timer_text;
     private TextView help_text;
     private TextView score_text;
+    private int intNumberofBINGO = 0;
 
     private TextView textView_B;
     private TextView textView_I;
@@ -116,8 +117,10 @@ public class MainActivity extends ActionBarActivity {
                     writer.println(tv.getText());
 
                     int k =getNumberOfRowsStriked();
-                    if (k > 0){
+                    if (k - intNumberofBINGO > 0){
                         score += k*25;
+                        intNumberofBINGO = k;
+                        score_text.setText(String.valueOf(score));
                         if(k >= 5){
                             score += 500;       //BINGO
                         }
@@ -270,6 +273,14 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if(strikedAlphabet.containsKey(4) && strikedAlphabet.containsKey(9) && strikedAlphabet.containsKey(14) && strikedAlphabet.containsKey(19) && strikedAlphabet.containsKey(24)){
+            k++;
+        }
+
+        if(strikedAlphabet.containsKey(0) && strikedAlphabet.containsKey(6) && strikedAlphabet.containsKey(12) && strikedAlphabet.containsKey(18) && strikedAlphabet.containsKey(24)){
+            k++;
+        }
+
+        if(strikedAlphabet.containsKey(4) && strikedAlphabet.containsKey(8) && strikedAlphabet.containsKey(12) && strikedAlphabet.containsKey(16) && strikedAlphabet.containsKey(20)){
             k++;
         }
 
