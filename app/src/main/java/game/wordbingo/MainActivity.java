@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -45,12 +46,20 @@ public class MainActivity extends ActionBarActivity {
     public String button_values[] = new String[25];
     String swiped_word="", prev="";
     private boolean blnAplhabetSelctionMode = true;
-    String[] numbers = new String[] {
-            "A", "B", "C", "D", "E",
-            "F", "G", "H", "I", "J",
-            "K", "L", "M", "N", "O",
-            "P", "Q", "R", "S", "T",
-            "U", "V", "W", "X", "Y"};
+
+    String[] numbers1 = new String[] {
+            "B", "A", "T", "D", "E",
+            "O", "C", "H", "I", "W",
+            "U", "I", "E", "M", "O",
+            "T", "D", "R", "S", "C",
+            "U", "V", "J", "X", "Y"};
+    String[] numbers2 = new String[] {
+            "A", "B", "O", "D", "E",
+            "F", "G", "H", "I", "T",
+            "I", "L", "M", "N", "O",
+            "N", "Q", "A", "S", "T",
+            "E", "V", "I", "L", "Y"};
+
 
     private Hashtable strikedAlphabet = new Hashtable();
     private Hashtable nonstrikedAlphabet = new Hashtable();
@@ -70,6 +79,7 @@ public class MainActivity extends ActionBarActivity {
     private final long startTime = 5100;
     private final long interval = 1000;
     public Map<String, Integer> m = new HashMap<String, Integer>();
+    public Map<String, Integer> captured = new HashMap<String, Integer>();
     int score=0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,10 +100,18 @@ public class MainActivity extends ActionBarActivity {
         textView_O = (TextView)this.findViewById(R.id.textView_O);
         updateButtonValues();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, button_values);
-
-        gridView.setAdapter(adapter);
+        Random random_matrix = new Random();
+        int num = random_matrix.nextInt(2);
+        Log.d(TAG, "random num generated:::" + num);
+        if ( num == 1) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, numbers1);
+            gridView.setAdapter(adapter);
+        }else {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, numbers2);
+            gridView.setAdapter(adapter);
+        }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -215,22 +233,35 @@ public class MainActivity extends ActionBarActivity {
 
     public void makeHash(){
         try {
-            BufferedReader in = new BufferedReader(new FileReader("R.raw.dict.txt"));
-            String str;
+            InputStream ins = getResources().openRawResource(
+                    getResources().getIdentifier("raw/dict",
+                            "raw", getPackageName()));
+            //BufferedReader in = new BufferedReader(new FileReader("R.raw.dict.txt"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(ins));
+            String str = "";
             while ((str = in.readLine()) != null)
-                m.put(str,1);
+               // Log.d(TAG, "OUT the word is:::===" + str);
+
+                m.put(str, 1);
+
             in.close();
         } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Unable to load======hash value");
         }
     }
 
-	public  boolean isGoodWord(String word){
+	public boolean isGoodWord(String word){
         System.out.println("word===>>>>> "+word);
+        Log.d(TAG, "OUT the word is:::===" + m.get("abode").toString());
         return m.containsKey(word);
     }
 
     public void calculatescore(String word){
-        if (isGoodWord(word)){
+        Log.d(TAG,"OUT the word is:::"+word+"<><>"+word.toLowerCase());
+        if ((isGoodWord(word.toLowerCase())) && (!captured.containsKey(word.toLowerCase()))){
+            captured.put(word.toLowerCase(),1);
+            Log.d(TAG,"the word is:::"+word+"<><>"+word.toLowerCase());
             int len = word.length();
             score += len*10;
             score_text.setText(String.valueOf(score));
