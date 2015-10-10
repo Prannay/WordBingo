@@ -24,8 +24,9 @@ public class MainActivity extends ActionBarActivity {
 
     String TAG = this.getClass().getSimpleName();
     GridView gridView;
+    public String button_values[] = new String[25];
     String swiped_word="", prev="";
-    static final String[] numbers = new String[] {
+    String[] numbers = new String[] {
             "A", "B", "C", "D", "E",
             "F", "G", "H", "I", "J",
             "K", "L", "M", "N", "O",
@@ -39,9 +40,10 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         gridView = (GridView) findViewById(R.id.gridView1);
+        updateButtonValues();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, numbers);
+                android.R.layout.simple_list_item_1, button_values);
 
         gridView.setAdapter(adapter);
 
@@ -85,4 +87,30 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
+
+    public String getNextString(int num){
+        Random random = new Random();
+        String c;
+        boolean isvalid;
+        do {
+            isvalid = true;
+            c = String.valueOf((char) (random.nextInt(26)+'A'));
+            for (int i = 0; i < num; i++) {
+                if (button_values[i].equals(c)){
+                    isvalid = false;
+                    break;
+                }
+            }
+        }while(!isvalid);
+        return c;
+    }
+
+    public boolean updateButtonValues(){
+        for(int i=0;i<25;i++){
+            button_values[i] = getNextString(i);
+        }
+        return true;
+    }
+
+
 }
