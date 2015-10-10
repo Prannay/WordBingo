@@ -145,6 +145,22 @@ public void init_buttons(){
     }
 
 
+    public String getButtonValue(int id){
+        String text = null;
+        for (int i=0;i<buttons.length;i++){
+            if (buttons[i].getId() == id){
+                text = String.valueOf(buttons[i].getText());
+                //buttons[i].setBackgroundColor(0);
+                break;
+            }
+        }
+        return text;
+    }
+
+    public void onButtonClick(View v){
+        String string= getButtonValue(v.getId());
+        Log.d(TAG,"GOT value from button "+string);
+    }
 
     // CountDownTimer class
     public class MalibuCountDownTimer extends CountDownTimer
