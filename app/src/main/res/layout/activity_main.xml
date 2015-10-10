@@ -324,6 +324,26 @@
         android:layout_marginBottom="0dp"
         android:textSize="40dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="00"
+        android:id="@+id/textView_timer"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/button_04"
+        android:layout_toEndOf="@+id/button_04"
+        android:layout_marginLeft="32dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="start"
+        android:id="@+id/button_start"
+        android:onClick="onClick_Start"
+        android:layout_below="@+id/textView_timer"
+        android:layout_toRightOf="@+id/button_04"
+        android:layout_toEndOf="@+id/button_04" />
 
 
 </RelativeLayout>
