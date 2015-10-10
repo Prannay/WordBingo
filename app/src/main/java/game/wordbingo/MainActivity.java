@@ -16,12 +16,23 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Random;
 import java.util.Timer;
 
 
 public class MainActivity extends ActionBarActivity {
 
+    //String serverIP = "10.112.229.53";
+    String serverIP = "192.168.43.31";
+    String serverPort = "8887";
+    InputStreamReader reader = null;
+    BufferedReader read = null;
+    PrintWriter writer = null;
     String TAG = this.getClass().getSimpleName();
     GridView gridView;
     public String button_values[] = new String[25];
@@ -55,6 +66,9 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        Thread clientThr = new Thread(new Client());
+        clientThr.start();
+
         gridView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent me) {
 
@@ -68,19 +82,20 @@ public class MainActivity extends ActionBarActivity {
                 TextView tv = (TextView) gridView.getChildAt(position);
                 Rect rect = null;
                 //if(me.getAction() == MotionEvent.ACTION_DOWN){
-                    // Construct a rect of the view's bounds
-                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                // Construct a rect of the view's bounds
+                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
                 //}
-                if (me.getAction()==MotionEvent.ACTION_MOVE) {
-                    if(rect.contains(v.getLeft() + (int) me.getX(), v.getTop() + (int) me.getY())) {
-                        if((prev == "" || prev!=s) && s!=null ) {
+                if (me.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (rect.contains(v.getLeft() + (int) me.getX(), v.getTop() + (int) me.getY())) {
+                        if ((prev == "" || prev != s) && s != null) {
                             swiped_word = swiped_word + s;
                             prev = s;
                         }
                         Log.d(TAG, "Swiped value-> " + swiped_word);
                     }
                 }
-                if (me.getAction()==MotionEvent.ACTION_UP) {
+                if (me.getAction() == MotionEvent.ACTION_UP) {
+                    writer.println(swiped_word);
                     swiped_word = "";
                 }
                 return true;
@@ -112,5 +127,40 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    public class Client implements Runnable{
+        String recvMessage = null;
+        String IP = serverIP;
+        int port = Integer.parseInt(serverPort);
+        Socket clientSocket = null;
 
+        public void run() {
+            try {
+                System.out.println(IP);
+                System.out.println(port);
+                clientSocket = new Socket(IP, port);
+
+            } catch (IOException e) {
+                System.out.println("Error creating Socket!");
+            }
+            try {
+                reader = new InputStreamReader(clientSocket.getInputStream());
+                read = new BufferedReader(reader);
+                writer = new PrintWriter(clientSocket.getOutputStream(), true);
+                int i = 0;
+                while (true) {
+                    recvMessage = read.readLine(); //work
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            System.out.println(recvMessage);
+                            Toast.makeText(getApplicationContext(), "Received Message from Server : "
+                                    + recvMessage, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    System.out.println("Receive" + recvMessage);
+                }
+            } catch (IOException e) {
+                System.out.println("Error reading from Socket!");
+            }
+        }
+    }
 }
