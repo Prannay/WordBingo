@@ -67,6 +67,7 @@ public class MainActivity extends ActionBarActivity {
         timer_text = (TextView) this.findViewById(R.id.textView_timer);
         countDownTimer = new MalibuCountDownTimer(startTime, interval);
         timer_text.setText(String.valueOf(startTime / 1000));
+        help_text = (TextView)this.findViewById(R.id.textView_Help);
         updateButtonValues();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -93,8 +94,17 @@ public class MainActivity extends ActionBarActivity {
                     writer.println(tv.getText());
                     Log.d(TAG, "Clicked Alphabet: " + tv.getText());
                     Log.d(TAG, "Clicked Alphabet ID: " + tv.getId());
-                    toggleSelectAndSwipeMode();
+                    if(strikedAlphabet.size() > 2) {
+                        toggleSelectAndSwipeMode();
+                    }
+                    else{
+                        countDownTimer.cancel();
+                        countDownTimer = new MalibuCountDownTimer(5100, 1000);
+                        timer_text.setText(String.valueOf(5100 / 1000));
+                        countDownTimer.start();
+                    }
                 }
+                
             }
         });
 
@@ -182,6 +192,7 @@ public class MainActivity extends ActionBarActivity {
             countDownTimer = new MalibuCountDownTimer(10100, 1000);
             timer_text.setText(String.valueOf(10100/1000));
             countDownTimer.start();
+            help_text.setText("Swipe Words");
         }
         else
         {
@@ -208,6 +219,7 @@ public class MainActivity extends ActionBarActivity {
             countDownTimer = new MalibuCountDownTimer(5100, 1000);
             timer_text.setText(String.valueOf(5100 / 1000));
             countDownTimer.start();
+            help_text.setText("Choose Alphabet");
         }
     }
     public String getNextString(int num){
