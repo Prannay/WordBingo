@@ -17,12 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
@@ -32,7 +35,7 @@ public class MainActivity extends ActionBarActivity {
 
     //String serverIP = "10.112.229.53";
     String serverIP = "192.168.43.31";
-    String serverPort = "8885";
+    String serverPort = "8882";
     InputStreamReader reader = null;
     BufferedReader read = null;
     PrintWriter writer = null;
@@ -49,14 +52,15 @@ public class MainActivity extends ActionBarActivity {
             "U", "V", "W", "X", "Y"};
 
     private Hashtable strikedAlphabet = new Hashtable();
-    private  Hashtable nonstrikedAlphabet = new Hashtable();
+    private Hashtable nonstrikedAlphabet = new Hashtable();
     private MalibuCountDownTimer countDownTimer;
     private boolean timerHasStarted = false;
     private TextView timer_text;
     private TextView help_text;
     private final long startTime = 5100;
     private final long interval = 1000;
-
+    public Map<String, Integer> m = new HashMap<String, Integer>();
+    int score=0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
                                     int position, long id) {
                 //Toast.makeText(getApplicationContext(),
                 //((TextView) v).getText(), Toast.LENGTH_SHORT).show();
-                if(blnAplhabetSelctionMode) {
+                if (blnAplhabetSelctionMode) {
                     TextView tv = (TextView) v;
                     for (int i = 0; i < 25; i++) {
                         View temp = gridView.getChildAt(i);
@@ -97,7 +101,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
-
+        makeHash();
         Thread clientThr = new Thread(new Client());
         clientThr.start();
 
@@ -149,13 +153,26 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    public void makeHash(){
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("R.raw.dict.txt"));
+            String str;
+            while ((str = in.readLine()) != null)
+                m.put(str,1);
+            in.close();
+        } catch (IOException e) {
+        }
+    }
+
 	public  boolean isGoodWord(String word){
-        return true;
+        System.out.println("word===>>>>> "+word);
+        return m.containsKey(word);
     }
 
     public void calculatescore(String word){
         if (isGoodWord(word)){
             int len = word.length();
+            score += len*10;
 
         }
     }
